@@ -5,6 +5,7 @@ import 'otp_verification_screen.dart';
 import 'create_name.dart';
 import 'message_screen.dart';
 import 'profile_screen.dart';
+import 'contact_screen.dart';
 
 void main() {
   runApp(MyApp());

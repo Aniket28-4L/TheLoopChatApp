@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'message_screen.dart'; // Import MessageScreen to enable navigation
+import 'contact_screen.dart'; // Import ContactsScreen for navigation
 
 class ProfileScreen extends StatefulWidget {
   final String? name; // Optional name parameter
@@ -149,7 +150,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
               );
               break;
             case 1:
-              // Add Contacts navigation if required later
+              // Navigate to ContactsScreen
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => ContactScreen()),
+              );
               break;
             case 2:
               // Stay on the current Profile screen, do nothing
