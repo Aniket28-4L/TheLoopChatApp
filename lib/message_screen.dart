@@ -21,6 +21,14 @@ class _MessageScreenState extends State<MessageScreen> {
     {"name": "Kristin Watson", "message": "You're welcome", "time": "9:23", "unread": 0},
     {"name": "Albert Flores", "message": "You're welcome", "time": "9:23", "unread": 0},
     {"name": "Jane Cooper", "message": "You're welcome", "time": "9:23", "unread": 0},
+     {"name": "Jigo Junagadh", "message": "You're welcome", "time": "9:23", "unread": 0},
+    {"name": "Annette Black", "message": "Hello there?", "time": "8:45", "unread": 0},
+    {"name": "Bessie Cooper", "message": "Thanks ray!", "time": "9:23", "unread": 2},
+    {"name": "Darlene Robertson", "message": "Okay thank you robbert", "time": "6:00", "unread": 0},
+    {"name": "Arlene McCoy", "message": "Okay thank you robbert", "time": "9:23", "unread": 2},
+    {"name": "Kristin Watson", "message": "You're welcome", "time": "9:23", "unread": 0},
+    {"name": "Albert Flores", "message": "You're welcome", "time": "9:23", "unread": 0},
+    {"name": "Jane Cooper", "message": "You're welcome", "time": "9:23", "unread": 0}
   ];
 
   void _toggleSearch() {
@@ -46,7 +54,7 @@ class _MessageScreenState extends State<MessageScreen> {
         backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
-          icon: Image.asset('assets/icons/loop_icon.png'), // Custom loop icon
+          icon: Image.asset('assets/images/loop_logo.png'), // Custom loop icon
           onPressed: () {
             // Action for loop icon
           },
@@ -82,12 +90,14 @@ class _MessageScreenState extends State<MessageScreen> {
           return ListTile(
             leading: CircleAvatar(
               child: Text(message['name'][0]),
+              backgroundColor: const Color.fromARGB(255, 136, 136, 136),
             ),
             title: Text(
               message['name'],
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
+                
               ),
             ),
             subtitle: Text(message['message']),
@@ -123,7 +133,7 @@ class _MessageScreenState extends State<MessageScreen> {
               onPressed: () {
                 // Action for new message
               },
-              backgroundColor: Colors.purple,
+              backgroundColor: const Color.fromARGB(255, 234, 114, 255),
               child: Icon(Icons.flash_on, size: 24), // Thunder icon
             ),
           ),
