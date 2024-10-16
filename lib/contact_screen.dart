@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'message_screen.dart'; // Import the MessageScreen for navigation
-import 'profile_screen.dart'; // Import the ProfileScreen for navigation
+import 'package:share_plus/share_plus.dart'; // Ensure you have this import
+import 'package:contacts_service/contacts_service.dart'; // Import contacts service
+import 'package:permission_handler/permission_handler.dart'; // Import permission handler
+import 'message_screen.dart';
+import 'profile_screen.dart';
 
 class ContactScreen extends StatefulWidget {
+  const ContactScreen({super.key});
+
   @override
   _ContactScreenState createState() => _ContactScreenState();
 }
 
 class _ContactScreenState extends State<ContactScreen> {
-  // Sample data for contacts (replace with actual data or API integration)
   final List<Map<String, dynamic>> contacts = [
     {"name": "Jigo Junagadh", "status": "Online", "lastSeen": null},
     {"name": "Antonio Banderas", "status": "Online", "lastSeen": null},
@@ -20,99 +24,263 @@ class _ContactScreenState extends State<ContactScreen> {
     {"name": "Floyd Miles", "status": null, "lastSeen": "Long time ago"},
   ];
 
+  List<Map<String, dynamic>> filteredContacts = []; // List for filtered contacts
+  final TextEditingController _searchController = TextEditingController(); // Text editing controller
+
+  @override
+  void initState() {
+    super.initState();
+    filteredContacts = contacts; // Initialize filtered contacts
+    _searchController.addListener(_filterContacts); // Add listener to search controller
+  }
+
+  void _filterContacts() {
+    final query = _searchController.text.toLowerCase();
+    setState(() {
+      filteredContacts = contacts
+          .where((contact) =>
+              contact['name'].toLowerCase().contains(query))
+          .toList();
+    });
+  }
+
+  void _showInviteFriendsPopup() {
+    // Create a shareable message
+    final String message = 'Check out this cool app: <your_link_here>';
+    Share.share(message); // Directly share the message without any popup
+  }
+
+  Future<void> _fetchContacts() async {
+    // Request permission to access contacts
+    final PermissionStatus permissionStatus = await Permission.contacts.request();
+
+    if (permissionStatus.isGranted) {
+      Iterable<Contact> contactList = await ContactsService.getContacts();
+      // You can navigate to another screen to show the contacts or do something else
+      // For demonstration, just show a popup with the contacts
+      _showContactsDialog(contactList);
+    } else {
+      // Handle permission denied case
+      _showErrorDialog("Permission denied to access contacts.");
+    }
+  }
+
+  void _showContactsDialog(Iterable<Contact> contactList) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Your Contacts'),
+          content: SizedBox(
+            width: double.maxFinite,
+            child: ListView.builder(
+              itemCount: contactList.length,
+              itemBuilder: (context, index) {
+                Contact contact = contactList.elementAt(index);
+                return ListTile(
+                  title: Text(contact.displayName ?? 'No name'),
+                  onTap: () {
+                    Share.share('Check out this cool app: <your_link_here> with ${contact.displayName}');
+                    Navigator.pop(context); // Close the dialog after sharing
+                  },
+                );
+              },
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Close'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Error'),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Close'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose(); // Dispose of the controller
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        elevation: 0,
-        title: Text(
+        elevation: 4, // Added elevation for shadow effect
+        leading: IconButton(
+          icon: Image.asset('assets/images/loop_logo.png'), // Replacing back arrow with logo image
+          onPressed: () {
+            Navigator.pop(context); // Navigate back when pressed
+          },
+        ),
+        title: const Text(
           "Contacts",
           style: TextStyle(
-            fontSize: 18,
+            fontSize: 20, // Increased font size for visibility
             color: Colors.black,
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w600, // Slightly lighter font weight for a professional look
           ),
         ),
         centerTitle: true,
-        actions: [
-          IconButton(
-            icon: Icon(Icons.search, color: Colors.black),
-            onPressed: () {
-              // Action for search
-            },
-          ),
-        ],
       ),
       body: Column(
         children: [
-          // Add Invite and Find People Nearby Options
+          // Search Field
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    Icon(Icons.person_add, color: Colors.black),
-                    SizedBox(width: 8),
-                    Text(
-                      "Invite friends",
-                      style: TextStyle(fontSize: 16),
-                    ),
-                  ],
-                ),
-                Icon(Icons.arrow_forward_ios, size: 16, color: Colors.black),
-              ],
+            child: TextField(
+              controller: _searchController,
+              decoration: InputDecoration(
+                hintText: "Search Contacts",
+                border: const OutlineInputBorder(),
+                prefixIcon: const Icon(Icons.search),
+              ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    Icon(Icons.location_on, color: Colors.black),
-                    SizedBox(width: 8),
-                    Text(
-                      "Find people nearby",
-                      style: TextStyle(fontSize: 16),
-                    ),
-                  ],
-                ),
-                Icon(Icons.arrow_forward_ios, size: 16, color: Colors.black),
-              ],
-            ),
-          ),
-          Divider(height: 1, color: Colors.grey),
 
-          // List of Contacts
+          // Invite Friends Button
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            child: InkWell(
+              onTap: _showInviteFriendsPopup, // Show the sharing popup directly
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.black, // Black background
+                  borderRadius: BorderRadius.circular(8), // Rounded corners
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      spreadRadius: 2,
+                      blurRadius: 5,
+                      offset: const Offset(0, 3), // Changes position of shadow
+                    ),
+                  ],
+                ),
+                padding: const EdgeInsets.all(16.0), // Padding inside the container
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        const Icon(Icons.person_add, color: Colors.white, size: 24), // White icon
+                        const SizedBox(width: 8),
+                        const Text(
+                          "Invite friends",
+                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.white), // White text
+                        ),
+                      ],
+                    ),
+                    const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.white),
+                  ],
+                ),
+              ),
+            ),
+          ),
+
+          // Contacts Button
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+            child: InkWell(
+              onTap: _fetchContacts, // Fetch contacts on tap
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.black, // Black background
+                  borderRadius: BorderRadius.circular(8), // Rounded corners
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      spreadRadius: 2,
+                      blurRadius: 5,
+                      offset: const Offset(0, 3), // Changes position of shadow
+                    ),
+                  ],
+                ),
+                padding: const EdgeInsets.all(16.0), // Padding inside the container
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        const Icon(Icons.contacts, color: Colors.white, size: 24), // White icon
+                        const SizedBox(width: 8),
+                        const Text(
+                          "Contacts",
+                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.white), // White text
+                        ),
+                      ],
+                    ),
+                    const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.white),
+                  ],
+                ),
+              ),
+            ),
+          ),
+
+          const SizedBox(height: 10),
+          const Divider(height: 1, color: Colors.grey),
+          const SizedBox(height: 10),
+
+          // Contacts List
           Expanded(
-            child: contacts.isNotEmpty
+            child: filteredContacts.isNotEmpty
                 ? ListView.builder(
-                    itemCount: contacts.length,
+                    itemCount: filteredContacts.length,
                     itemBuilder: (context, index) {
-                      final contact = contacts[index];
-                      return ListTile(
-                        leading: CircleAvatar(
-                          child: Text(contact['name'][0]),
-                          backgroundColor: const Color.fromARGB(255, 136, 136, 136),
+                      final contact = filteredContacts[index];
+                      return Card(
+                        margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                        elevation: 3,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                        child: ListTile(
+                          leading: CircleAvatar(
+                            backgroundColor: Colors.black,
+                            child: Text(
+                              contact['name'][0],
+                              style: const TextStyle(color: Colors.white),
+                            ),
+                          ),
+                          title: Text(
+                            contact['name'],
+                            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                          ),
+                          subtitle: contact['status'] != null
+                              ? Text(
+                                  contact['status'],
+                                  style: const TextStyle(color: Colors.green),
+                                )
+                              : Text("Last seen ${contact['lastSeen']}"),
+                          trailing: IconButton(
+                            icon: const Icon(Icons.more_vert),
+                            onPressed: () {
+                              // Add options or actions on each contact
+                            },
+                          ),
                         ),
-                        title: Text(
-                          contact['name'],
-                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                        ),
-                        subtitle: contact['status'] != null
-                            ? Text(
-                                contact['status'],
-                                style: TextStyle(color: Colors.green),
-                              )
-                            : Text("Last seen ${contact['lastSeen']}"),
                       );
                     },
                   )
-                : Center(
+                : const Center(
                     child: Text(
                       "No contacts available",
                       style: TextStyle(fontSize: 18, color: Colors.grey),
@@ -121,37 +289,27 @@ class _ContactScreenState extends State<ContactScreen> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Open a new contact form or similar action
-        },
-        backgroundColor: Colors.black,
-        child: Icon(CupertinoIcons.person_2_fill),
-      ),
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 1, // Make Contacts the selected tab
+        currentIndex: 1,
         onTap: (int index) {
           switch (index) {
             case 0:
-              // Navigate to Messages screen
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (context) => MessageScreen()),
+                MaterialPageRoute(builder: (context) => const MessageScreen()),
               );
               break;
             case 1:
-              // Stay on Contacts screen
               break;
             case 2:
-              // Navigate to Profile screen
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (context) => ProfileScreen()),
+                MaterialPageRoute(builder: (context) => const ProfileScreen()),
               );
               break;
           }
         },
-        items: [
+        items: const [
           BottomNavigationBarItem(
             icon: Icon(CupertinoIcons.chat_bubble_text_fill),
             label: 'Messages',

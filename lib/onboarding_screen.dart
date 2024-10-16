@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'phone_input_screen.dart';
 
 class OnboardingScreen extends StatelessWidget {
+  const OnboardingScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -10,7 +12,7 @@ class OnboardingScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Spacer(),
+            const Spacer(),
             Center(
               child: Column(
                 children: [
@@ -18,21 +20,21 @@ class OnboardingScreen extends StatelessWidget {
                     'assets/images/loop_logo.png',  // Add the image path for your logo
                     height: 100,
                   ),
-                  SizedBox(height: 10),
-                  Text(
+                  const SizedBox(height: 10),
+                  const Text(
                     'LOOP',
                     style: TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Image.asset(
                     'assets/images/onboarding_image.png',  // Replace with your image path
                     height: 150,
                   ),
-                  SizedBox(height: 20),
-                  Text(
+                  const SizedBox(height: 20),
+                  const Text(
                     "Let's talk with your friends and family wherever and whenever",
                     textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 16),
@@ -40,18 +42,18 @@ class OnboardingScreen extends StatelessWidget {
                 ],
               ),
             ),
-            Spacer(),
+            const Spacer(),
             // Updated ElevatedButton with reduced horizontal padding
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
                   context,
                   PageRouteBuilder(
-                    transitionDuration: Duration(milliseconds: 500),
-                    pageBuilder: (_, __, ___) => PhoneInputScreen(),
+                    transitionDuration: const Duration(milliseconds: 500),
+                    pageBuilder: (_, __, ___) => const PhoneInputScreen(),
                     transitionsBuilder:
                         (context, animation, secondaryAnimation, child) {
-                      var begin = Offset(1.0, 0.0);
+                      var begin = const Offset(1.0, 0.0);
                       var end = Offset.zero;
                       var tween = Tween(begin: begin, end: end);
                       var offsetAnimation = animation.drive(tween);
@@ -66,9 +68,9 @@ class OnboardingScreen extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30),
                 ),
-                padding: EdgeInsets.symmetric(vertical: 20, horizontal: 50), // Reduced padding
+                padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 50), // Reduced padding
               ),
-              child: Text(
+              child: const Text(
                 'Continue with phone',
                 style: TextStyle(fontSize: 16),  // Adjust font size if needed
               ),

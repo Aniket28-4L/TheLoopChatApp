@@ -2,6 +2,8 @@
 import 'package:flutter/material.dart';
 
 class AIChatScreen extends StatefulWidget {
+  const AIChatScreen({super.key});
+
   @override
   _AIChatScreenState createState() => _AIChatScreenState();
 }
@@ -23,7 +25,7 @@ class _AIChatScreenState extends State<AIChatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("AI Chat"),
+        title: const Text("AI Chat"),
         backgroundColor: Colors.black,
       ),
       body: Column(
@@ -46,14 +48,14 @@ class _AIChatScreenState extends State<AIChatScreen> {
                 Expanded(
                   child: TextField(
                     controller: _controller,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       hintText: "Type a message...",
                       border: OutlineInputBorder(),
                     ),
                   ),
                 ),
                 IconButton(
-                  icon: Icon(Icons.send),
+                  icon: const Icon(Icons.send),
                   onPressed: _sendMessage,
                 ),
               ],

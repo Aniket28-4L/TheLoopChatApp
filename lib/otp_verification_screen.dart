@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'create_name.dart'; // Import the Create Name screen
 
 class VerificationCodeScreen extends StatefulWidget {
+  const VerificationCodeScreen({super.key});
+
   @override
   _VerificationCodeScreenState createState() => _VerificationCodeScreenState();
 }
@@ -31,7 +33,7 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black),
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -43,7 +45,7 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             // Bold text for "Enter code"
-            Text(
+            const Text(
               'Enter code',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
@@ -51,15 +53,15 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
                 color: Colors.black, // Darker text color
               ),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
 
             // Instruction text
-            Text(
+            const Text(
               'We’ve sent the code via SMS to your phone number.',
               textAlign: TextAlign.center,
               style: TextStyle(color: Colors.black87), // Darker instruction text
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
 
             // OTP input fields
             Row(
@@ -77,12 +79,12 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
                       maxLength: 1, // Limit to 1 digit per box
                       keyboardType: TextInputType.number,
                       textAlign: TextAlign.center,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 24, // Larger font for better visibility
                         fontWeight: FontWeight.bold,
                         color: Colors.black, // Darker text color
                       ),
-                      decoration: InputDecoration(
+                      decoration: const InputDecoration(
                         counterText: '', // Hides the character count indicator
                         border: InputBorder.none, // Removes underline
                       ),
@@ -92,19 +94,19 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
                 );
               }),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
 
             // Resend code option
             TextButton(
               onPressed: () {
                 // Add logic for resending code
               },
-              child: Text(
+              child: const Text(
                 "Didn't get the code? Resend code",
                 style: TextStyle(color: Colors.black), // Darker resend text
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
 
             // Continue button that stretches to the edges
             SizedBox(
@@ -115,7 +117,7 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => CreateNameScreen()), // Navigate to the Create Name screen
+                        builder: (context) => const CreateNameScreen()), // Navigate to the Create Name screen
                   );
                 },
                 style: ElevatedButton.styleFrom(
@@ -124,9 +126,9 @@ class _VerificationCodeScreenState extends State<VerificationCodeScreen> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
                   ),
-                  padding: EdgeInsets.symmetric(vertical: 20),
+                  padding: const EdgeInsets.symmetric(vertical: 20),
                 ),
-                child: Text('Continue'),
+                child: const Text('Continue'),
               ),
             ),
           ],

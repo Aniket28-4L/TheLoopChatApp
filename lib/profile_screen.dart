@@ -2,32 +2,43 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'message_screen.dart'; // Import MessageScreen to enable navigation
 import 'contact_screen.dart'; // Import ContactsScreen for navigation
+import 'notification_screen.dart'; // Import NotificationScreen for navigation
+import 'chats_screen.dart'; // Import ChatsScreen for navigation
+import 'edit_profile_screen.dart'; // Import EditProfileScreen for editing profile
 
 class ProfileScreen extends StatefulWidget {
   final String? name; // Optional name parameter
 
-  ProfileScreen({this.name}); // Constructor with name parameter
+  const ProfileScreen({super.key, this.name}); // Constructor with name parameter
 
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  String? _updatedName;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: Text(
+        elevation: 4, // Added elevation for shadow effect
+        leading: IconButton(
+          icon: Image.asset('assets/images/loop_logo.png'), // Replacing back arrow with logo image
+          onPressed: () {
+            Navigator.pop(context); // Navigate back when pressed
+          },
+        ),
+        title: const Text(
           'My Profile',
           style: TextStyle(
+            fontSize: 20, // Increased font size for visibility
             color: Colors.black,
-            fontWeight: FontWeight.bold,
-            fontSize: 18,
+            fontWeight: FontWeight.w600, // Slightly lighter font weight for a professional look
           ),
         ),
         centerTitle: true,
-        elevation: 1,
       ),
       body: ListView(
         children: [
@@ -36,28 +47,50 @@ class _ProfileScreenState extends State<ProfileScreen> {
             leading: CircleAvatar(
               radius: 30, // Size of the profile picture
               backgroundColor: Colors.grey,
-              child: Text(widget.name != null ? widget.name![0] : 'AP', style: TextStyle(fontSize: 20)), // Placeholder for profile avatar
+              child: Text(
+                (_updatedName != null ? _updatedName![0] : (widget.name != null ? widget.name![0] : 'AP')),
+                style: const TextStyle(fontSize: 20),
+              ), // Placeholder for profile avatar
             ),
-            title: Text(
-              widget.name ?? 'Unknown', // Display user name or "Unknown"
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
+            title: GestureDetector(
+              onTap: () async {
+                // Navigate to the Edit Profile Screen
+                final result = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EditProfileScreen(
+                      name: widget.name ?? 'Unknown', // Pass the current name to the edit screen
+                    ),
+                  ),
+                );
+                // Update the profile with the new name if provided
+                if (result != null && result.containsKey('name')) {
+                  setState(() {
+                    _updatedName = result['name']; // Update the name
+                  });
+                }
+              },
+              child: Text(
+                _updatedName ?? widget.name ?? 'Unknown', // Display updated name or fallback to the original name or "Unknown"
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                ),
               ),
             ),
-            subtitle: Text(
-              'Online', 
+            subtitle: const Text(
+              'Online',
               style: TextStyle(
                 color: Colors.green,
                 fontSize: 14,
               ),
             ),
           ),
-          Divider(),
+          const Divider(),
 
           // Settings Section Heading
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             child: Text(
               'Settings',
               style: TextStyle(
@@ -68,41 +101,65 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
           ),
 
-          // Settings options
+          // Settings options with updated styling
           ListTile(
-            leading: Icon(Icons.notifications, size: 24),
-            title: Text(
+            leading: const Icon(Icons.notifications, size: 24),
+            title: const Text(
               'Notification',
               style: TextStyle(fontSize: 16),
             ),
+            trailing: const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
+            onTap: () {
+              // Navigate to NotificationScreen
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const NotificationScreen()),
+              );
+            },
           ),
           ListTile(
-            leading: Icon(Icons.lock, size: 24),
-            title: Text(
+            leading: const Icon(Icons.lock, size: 24),
+            title: const Text(
               'Privacy and security',
               style: TextStyle(fontSize: 16),
             ),
+            trailing: const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
+            onTap: () {
+              // Handle Privacy and security tap here
+            },
           ),
           ListTile(
-            leading: Icon(Icons.chat, size: 24),
-            title: Text(
+            leading: const Icon(Icons.chat, size: 24),
+            title: const Text(
               'Chats',
               style: TextStyle(fontSize: 16),
             ),
+            trailing: const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
+            onTap: () {
+              // Navigate to ChatsScreen
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const ChatsScreen()),
+              );
+            },
           ),
           ListTile(
-            leading: Icon(Icons.storage, size: 24),
-            title: Text(
+            leading: const Icon(Icons.storage, size: 24),
+            title: const Text(
               'Storage and data',
               style: TextStyle(fontSize: 16),
             ),
+            trailing: const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
+            onTap: () {
+              // Handle Storage and data tap here
+            },
           ),
-          
-          Divider(),
+
+          const Divider(),
 
           // Help Section Heading
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             child: Text(
               'Help',
               style: TextStyle(
@@ -113,31 +170,43 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
           ),
 
-          // Help options
+          // Help options with updated styling
           ListTile(
-            leading: Icon(Icons.help, size: 24),
-            title: Text(
+            leading: const Icon(Icons.help, size: 24),
+            title: const Text(
               'What\'s up FAQ',
               style: TextStyle(fontSize: 16),
             ),
+            trailing: const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
+            onTap: () {
+              // Handle FAQ tap here
+            },
           ),
           ListTile(
-            leading: Icon(Icons.privacy_tip, size: 24),
-            title: Text(
+            leading: const Icon(Icons.privacy_tip, size: 24),
+            title: const Text(
               'Privacy policy',
               style: TextStyle(fontSize: 16),
             ),
+            trailing: const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
+            onTap: () {
+              // Handle Privacy policy tap here
+            },
           ),
           ListTile(
-            leading: Icon(Icons.question_answer, size: 24),
-            title: Text(
+            leading: const Icon(Icons.question_answer, size: 24),
+            title: const Text(
               'Ask a question',
               style: TextStyle(fontSize: 16),
             ),
+            trailing: const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
+            onTap: () {
+              // Handle Ask a question tap here
+            },
           ),
         ],
       ),
-      
+
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: 2, // Set this to 2, as the profile tab is selected
         onTap: (int index) {
@@ -146,14 +215,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
               // When "Messages" icon is tapped, navigate back to MessageScreen
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (context) => MessageScreen()),
+                MaterialPageRoute(builder: (context) => const MessageScreen()),
               );
               break;
             case 1:
               // Navigate to ContactsScreen
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (context) => ContactScreen()),
+                MaterialPageRoute(builder: (context) => const ContactScreen()),
               );
               break;
             case 2:
@@ -161,24 +230,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
               break;
           }
         },
-        items: [
+        items: const [
           BottomNavigationBarItem(
             icon: Padding(
-              padding: const EdgeInsets.only(bottom: 8.0),
+              padding: EdgeInsets.only(bottom: 8.0),
               child: Icon(CupertinoIcons.chat_bubble_text_fill, size: 28),
             ),
             label: 'Messages',
           ),
           BottomNavigationBarItem(
             icon: Padding(
-              padding: const EdgeInsets.only(bottom: 8.0),
+              padding: EdgeInsets.only(bottom: 8.0),
               child: Icon(CupertinoIcons.person_2_fill, size: 28),
             ),
             label: 'Contacts',
           ),
           BottomNavigationBarItem(
             icon: Padding(
-              padding: const EdgeInsets.only(bottom: 8.0),
+              padding: EdgeInsets.only(bottom: 8.0),
               child: Icon(CupertinoIcons.person_fill, size: 28),
             ),
             label: 'Profile',

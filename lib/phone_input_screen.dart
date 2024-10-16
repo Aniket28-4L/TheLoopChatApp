@@ -49,7 +49,7 @@ class _PhoneInputScreenState extends State<PhoneInputScreen> {
         backgroundColor: Colors.transparent, // Make AppBar background transparent
         elevation: 0, // No shadow
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black), // Back arrow icon
+          icon: const Icon(Icons.arrow_back, color: Colors.black), // Back arrow icon
           onPressed: () {
             Navigator.pop(context); // Navigate back to the home page
           },
@@ -132,10 +132,10 @@ class _PhoneInputScreenState extends State<PhoneInputScreen> {
                     ),
                   ),
                   const SizedBox(width: 10), // Add spacing between prefix and input field
-                  Expanded(
+                  const Expanded(
                     child: TextField(
-                      style: const TextStyle(fontSize: 16), // Ensuring consistent font size
-                      decoration: const InputDecoration(
+                      style: TextStyle(fontSize: 16), // Ensuring consistent font size
+                      decoration: InputDecoration(
                         hintText: 'Phone Number',
                         hintStyle: TextStyle(
                           fontSize: 16,
@@ -160,7 +160,7 @@ class _PhoneInputScreenState extends State<PhoneInputScreen> {
                     context,
                     PageRouteBuilder(
                       transitionDuration: const Duration(milliseconds: 500),
-                      pageBuilder: (_, __, ___) => VerificationCodeScreen(),
+                      pageBuilder: (_, __, ___) => const VerificationCodeScreen(),
                       transitionsBuilder:
                           (context, animation, secondaryAnimation, child) {
                         var begin = const Offset(1.0, 0.0);
