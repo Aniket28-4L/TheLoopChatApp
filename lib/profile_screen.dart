@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'message_screen.dart'; // Import MessageScreen to enable navigation
-import 'contact_screen.dart'; // Import ContactsScreen for navigation
-import 'notification_screen.dart'; // Import NotificationScreen for navigation
-import 'chats_screen.dart'; // Import ChatsScreen for navigation
-import 'edit_profile_screen.dart'; // Import EditProfileScreen for editing profile
+import 'message_screen.dart';
+import 'contact_screen.dart';
+import 'notification_screen.dart';
+import 'chats_screen.dart';
+import 'edit_profile_screen.dart';
+import 'sto_data_screen.dart'; // Import StorageDataScreen for navigation
 
 class ProfileScreen extends StatefulWidget {
-  final String? name; // Optional name parameter
+  final String? name;
 
-  const ProfileScreen({super.key, this.name}); // Constructor with name parameter
+  const ProfileScreen({super.key, this.name});
 
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
@@ -23,19 +24,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        elevation: 4, // Added elevation for shadow effect
+        elevation: 4,
         leading: IconButton(
-          icon: Image.asset('assets/images/loop_logo.png'), // Replacing back arrow with logo image
+          icon: Image.asset('assets/images/loop_logo.png'),
           onPressed: () {
-            Navigator.pop(context); // Navigate back when pressed
+            Navigator.pop(context);
           },
         ),
         title: const Text(
           'My Profile',
           style: TextStyle(
-            fontSize: 20, // Increased font size for visibility
+            fontSize: 20,
             color: Colors.black,
-            fontWeight: FontWeight.w600, // Slightly lighter font weight for a professional look
+            fontWeight: FontWeight.w600,
           ),
         ),
         centerTitle: true,
@@ -45,33 +46,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
           // Profile Info
           ListTile(
             leading: CircleAvatar(
-              radius: 30, // Size of the profile picture
+              radius: 30,
               backgroundColor: Colors.grey,
               child: Text(
                 (_updatedName != null ? _updatedName![0] : (widget.name != null ? widget.name![0] : 'AP')),
                 style: const TextStyle(fontSize: 20),
-              ), // Placeholder for profile avatar
+              ),
             ),
             title: GestureDetector(
               onTap: () async {
-                // Navigate to the Edit Profile Screen
                 final result = await Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => EditProfileScreen(
-                      name: widget.name ?? 'Unknown', // Pass the current name to the edit screen
+                      name: widget.name ?? 'Unknown',
                     ),
                   ),
                 );
-                // Update the profile with the new name if provided
                 if (result != null && result.containsKey('name')) {
                   setState(() {
-                    _updatedName = result['name']; // Update the name
+                    _updatedName = result['name'];
                   });
                 }
               },
               child: Text(
-                _updatedName ?? widget.name ?? 'Unknown', // Display updated name or fallback to the original name or "Unknown"
+                _updatedName ?? widget.name ?? 'Unknown',
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 18,
@@ -110,7 +109,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             trailing: const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
             onTap: () {
-              // Navigate to NotificationScreen
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const NotificationScreen()),
@@ -136,7 +134,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             trailing: const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
             onTap: () {
-              // Navigate to ChatsScreen
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const ChatsScreen()),
@@ -151,7 +148,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             trailing: const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
             onTap: () {
-              // Handle Storage and data tap here
+              // Navigate to StorageDataScreen
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const StorageDataScreen()),
+              );
             },
           ),
 
@@ -208,25 +209,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
 
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 2, // Set this to 2, as the profile tab is selected
+        currentIndex: 2,
         onTap: (int index) {
           switch (index) {
             case 0:
-              // When "Messages" icon is tapped, navigate back to MessageScreen
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (context) => const MessageScreen()),
               );
               break;
             case 1:
-              // Navigate to ContactsScreen
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (context) => const ContactScreen()),
               );
               break;
             case 2:
-              // Stay on the current Profile screen, do nothing
               break;
           }
         },
