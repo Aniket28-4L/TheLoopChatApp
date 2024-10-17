@@ -138,7 +138,7 @@ class _StorageDataScreenState extends State<StorageDataScreen> {
           ),
         ),
         centerTitle: true,
-        backgroundColor: Colors.white,
+        backgroundColor: const Color(0xFFF1EFF6), // Updated app bar background color
         elevation: 4,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
@@ -147,131 +147,133 @@ class _StorageDataScreenState extends State<StorageDataScreen> {
           },
         ),
       ),
-      body: ListView(
-        padding: const EdgeInsets.all(16.0),
-        children: [
-          // Manage storage
-          ListTile(
-            leading: const Icon(Icons.folder, color: Colors.black),
-            title: Text(
-              'Manage storage',
-              style: TextStyle(color: Colors.black, fontSize: 16),
+      body: Container(
+        color: const Color(0xFFFEF7FF), // Updated overall background color
+        child: ListView(
+          padding: const EdgeInsets.all(16.0),
+          children: [
+            // Manage storage
+            ListTile(
+              leading: const Icon(Icons.folder, color: Colors.black),
+              title: Text(
+                'Manage storage',
+                style: TextStyle(color: Colors.black, fontSize: 16),
+              ),
+              subtitle: const Text(
+                '12.1 GB',
+                style: TextStyle(color: Colors.grey),
+              ),
+              onTap: () {
+                // Manage storage logic here
+              },
             ),
-            subtitle: const Text(
-              '12.1 GB',
-              style: TextStyle(color: Colors.grey),
-            ),
-            onTap: () {
-              // Manage storage logic here
-            },
-          ),
-          const Divider(color: Colors.grey),
+            const Divider(color: Colors.grey),
 
-          // Network usage
-          ListTile(
-            leading: const Icon(Icons.network_check, color: Colors.black),
-            title: Text(
-              'Network usage',
-              style: TextStyle(color: Colors.black, fontSize: 16),
+            // Network usage
+            ListTile(
+              leading: const Icon(Icons.network_check, color: Colors.black),
+              title: Text(
+                'Network usage',
+                style: TextStyle(color: Colors.black, fontSize: 16),
+              ),
+              subtitle: const Text(
+                '288.7 MB sent • 1.7 GB received',
+                style: TextStyle(color: Colors.grey),
+              ),
+              onTap: () {
+                // Network usage logic here
+              },
             ),
-            subtitle: const Text(
-              '288.7 MB sent • 1.7 GB received',
-              style: TextStyle(color: Colors.grey),
-            ),
-            onTap: () {
-              // Network usage logic here
-            },
-          ),
-          const Divider(color: Colors.grey),
+            const Divider(color: Colors.grey),
 
-          // Use less data for calls
-          SwitchListTile(
-            value: false,
-            onChanged: (bool value) {
-              // Data saving logic here
-            },
-            title: Text(
-              'Use less data for calls',
-              style: TextStyle(color: Colors.black, fontSize: 16),
+            // Use less data for calls
+            SwitchListTile(
+              value: false,
+              onChanged: (bool value) {
+                // Data saving logic here
+              },
+              title: Text(
+                'Use less data for calls',
+                style: TextStyle(color: Colors.black, fontSize: 16),
+              ),
+              secondary: const Icon(Icons.data_saver_on, color: Colors.black),
+              activeColor: const Color(0xFF4A148C), // Purple color for the active switch
+              inactiveThumbColor: Colors.grey,
             ),
-            secondary: const Icon(Icons.data_saver_on, color: Colors.black),
-            activeColor: Colors.black,
-            inactiveThumbColor: Colors.grey,
-          ),
-          const Divider(color: Colors.grey),
+            const Divider(color: Colors.grey),
 
-          // Proxy
-          ListTile(
-            leading: const Icon(Icons.vpn_key, color: Colors.black),
-            title: Text(
-              'Proxy',
-              style: TextStyle(color: Colors.black, fontSize: 16),
+            // Proxy
+            ListTile(
+              leading: const Icon(Icons.vpn_key, color: Colors.black),
+              title: Text(
+                'Proxy',
+                style: TextStyle(color: Colors.black, fontSize: 16),
+              ),
+              subtitle: Text(proxyStatus, style: const TextStyle(color: Colors.grey)),
+              trailing: const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
+              onTap: _selectProxy,
             ),
-            subtitle: Text(proxyStatus, style: const TextStyle(color: Colors.grey)),
-            trailing: const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
-            onTap: _selectProxy,
-          ),
-          const Divider(color: Colors.grey),
+            const Divider(color: Colors.grey),
 
-          // Media upload quality
-          ListTile(
-            leading: const Icon(Icons.high_quality, color: Colors.black),
-            title: Text(
-              'Media upload quality',
-              style: TextStyle(color: Colors.black, fontSize: 16),
+            // Media upload quality
+            ListTile(
+              leading: const Icon(Icons.high_quality, color: Colors.black),
+              title: Text(
+                'Media upload quality',
+                style: TextStyle(color: Colors.black, fontSize: 16),
+              ),
+              subtitle: Text(uploadQuality, style: const TextStyle(color: Colors.grey)),
+              trailing: const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
+              onTap: _selectUploadQuality,
             ),
-            subtitle: Text(uploadQuality, style: const TextStyle(color: Colors.grey)),
-            trailing: const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
-            onTap: _selectUploadQuality,
-          ),
-          const Divider(color: Colors.grey),
+            const Divider(color: Colors.grey),
 
-          // Media auto-download
-          const Text(
-            'Media auto-download',
-            style: TextStyle(
-              color: Colors.grey,
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
+            // Media auto-download
+            const Text(
+              'Media auto-download',
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+              ),
             ),
-          ),
-          const SizedBox(height: 16),
+            const SizedBox(height: 16),
 
-          // Mobile data download
-          ListTile(
-            title: Text(
-              'When using mobile data',
-              style: TextStyle(color: Colors.black, fontSize: 16),
+            // Mobile data download
+            ListTile(
+              title: Text(
+                'When using mobile data',
+                style: TextStyle(color: Colors.black, fontSize: 16),
+              ),
+              subtitle: Text(mobileDataDownload, style: const TextStyle(color: Colors.grey)),
+              trailing: const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
+              onTap: _selectMobileDataDownload,
             ),
-            subtitle: Text(mobileDataDownload, style: const TextStyle(color: Colors.grey)),
-            trailing: const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
-            onTap: _selectMobileDataDownload,
-          ),
 
-          // Wi-Fi download
-          ListTile(
-            title: Text(
-              'When connected on Wi-Fi',
-              style: TextStyle(color: Colors.black, fontSize: 16),
+            // Wi-Fi download
+            ListTile(
+              title: Text(
+                'When connected on Wi-Fi',
+                style: TextStyle(color: Colors.black, fontSize: 16),
+              ),
+              subtitle: Text(wifiDownload, style: const TextStyle(color: Colors.grey)),
+              trailing: const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
+              onTap: _selectWifiDownload,
             ),
-            subtitle: Text(wifiDownload, style: const TextStyle(color: Colors.grey)),
-            trailing: const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
-            onTap: _selectWifiDownload,
-          ),
 
-          // Roaming download
-          ListTile(
-            title: Text(
-              'When roaming',
-              style: TextStyle(color: Colors.black, fontSize: 16),
+            // Roaming download
+            ListTile(
+              title: Text(
+                'When roaming',
+                style: TextStyle(color: Colors.black, fontSize: 16),
+              ),
+              subtitle: Text(roamingDownload, style: const TextStyle(color: Colors.grey)),
+              trailing: const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
+              onTap: _selectRoamingDownload,
             ),
-            subtitle: Text(roamingDownload, style: const TextStyle(color: Colors.grey)),
-            trailing: const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
-            onTap: _selectRoamingDownload,
-          ),
-        ],
+          ],
+        ),
       ),
-      backgroundColor: Colors.white,
     );
   }
 }
